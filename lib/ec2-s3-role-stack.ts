@@ -42,17 +42,10 @@ export class Ec2S3RoleStack extends cdk.Stack {
       allowAllOutbound: true,
     });
 
-    webserverSG.addIngressRule(
-      Peer.anyIpv4(),
-      Port.tcp(22),
-      "allow SSH access from anywhere"
-    );
-
     const webserverRole = new Role(this, "ec2-to-s3-access-role", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
       managedPolicies: [
-        ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"),
-        //ManagedPolicy.fromAwsManagedPolicyName("AWSCloudFormationFullAccess")
+        ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"),
       ],
     });
 
@@ -68,7 +61,7 @@ export class Ec2S3RoleStack extends cdk.Stack {
         generation: AmazonLinuxGeneration.AMAZON_LINUX_2,
       }),
       userData: UserData.custom(
-        readFileSync("./scripts/installPython.sh", "utf8")
+        readFileSync("./scripts/s3.py", "utf8")
       ),
       userDataCausesReplacement:true,
       keyName: "ec2-input-system-instance-1-key",
