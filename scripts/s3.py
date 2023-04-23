@@ -3,7 +3,7 @@
 from datetime import datetime
 import subprocess
 
-bucket_name = f's3://ec2-s3-role--{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}'
+bucket_name = f's3://ec2-s3-role-{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}'
 file_name = "HelloWorld.txt" 
 
 subprocess.run(["aws", "s3","mb",bucket_name], stderr=subprocess.PIPE, text=True)
